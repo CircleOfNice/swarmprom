@@ -1,10 +1,5 @@
 version: "3.3"
 
-networks:
-  net:
-    driver: overlay
-    attachable: true
-
 volumes:
     prometheus: {}
     grafana: {}
@@ -24,7 +19,7 @@ services:
   dockerd-exporter:
     image: stefanprodan/caddy
     networks:
-      - net
+      - admin-net
     environment:
       - DOCKER_GWBRIDGE_IP=172.18.0.1
     configs:
@@ -41,7 +36,7 @@ services:
   cadvisor:
     image: google/cadvisor
     networks:
-      - net
+      - admin-net
     command: -logtostderr -docker_only
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -60,7 +55,7 @@ services:
   grafana:
     image: stefanprodan/swarmprom-grafana:5.0.1
     networks:
-      - net
+      - admin-net
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
@@ -89,7 +84,7 @@ services:
   alertmanager:
     image: stefanprodan/swarmprom-alertmanager:v0.14.0
     networks:
-      - net
+      - admin-net
     environment:
       - SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
       - SLACK_CHANNEL=${SLACK_CHANNEL:-general}
@@ -114,7 +109,7 @@ services:
   unsee:
     image: cloudflare/unsee:v0.8.0
     networks:
-      - net
+      - admin-net
     environment:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
     deploy:
@@ -124,7 +119,7 @@ services:
   node-exporter:
     image: stefanprodan/swarmprom-node-exporter:v0.15.2
     networks:
-      - net
+      - admin-net
     environment:
       - NODE_ID={{.Node.ID}}
     volumes:
@@ -152,7 +147,7 @@ services:
   prometheus:
     image: stefanprodan/swarmprom-prometheus:v2.2.0-rc.0
     networks:
-      - net
+      - admin-net
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
@@ -180,13 +175,9 @@ services:
 
   caddy:
     image: stefanprodan/caddy
-    ports:
-      - "3000:3000"
-      - "9090:9090"
-      - "9093:9093"
-      - "9094:9094"
+    hostname: caddy
     networks:
-      - net
+      - admin-net
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
