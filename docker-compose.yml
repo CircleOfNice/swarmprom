@@ -57,6 +57,7 @@ services:
     networks:
       - registry-stack_admin-net
     environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_SECURITY_ADMIN_USER=
       - GF_SECURITY_ADMIN_PASSWORD=
       - GF_USERS_ALLOW_SIGN_UP=false
