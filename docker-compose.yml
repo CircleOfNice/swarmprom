@@ -53,7 +53,7 @@ services:
           memory: 64M
 
   grafana:
-    image: stefanprodan/swarmprom-grafana:5.0.1
+    image: grafana-traffckr
     networks:
       - registry-stack_admin-net
     environment:
