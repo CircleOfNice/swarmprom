@@ -53,7 +53,7 @@ services:
           memory: 64M
 
   grafana:
-    image: grafana-traffckr
+    image: ${REGISTRY}grafana-traffckr
     networks:
       - registry-stack_admin-net
     environment:

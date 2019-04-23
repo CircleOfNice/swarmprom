@@ -55,7 +55,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS_WH211}",
+      "datasource": "Prometheus",
       "fill": 0,
       "gridPos": {
         "h": 10,
