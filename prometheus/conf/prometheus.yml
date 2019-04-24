@@ -46,8 +46,15 @@ scrape_configs:
       - targets: ['redis-exporter:9121']
 
   - job_name: kafka_exporter
+      dns_sd_configs:
+      - names:
+        - 'tasks.kafka_exporter'
+        type: 'A'
+        port: 9308
+
+  - job_name: 'kafka'
     static_configs:
-      - targets: ['kafka-exporter:9308']
+      - targets: ['kafka:7072']
 
   - job_name: zookeeper_exporter
     static_configs:
