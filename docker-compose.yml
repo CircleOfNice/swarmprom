@@ -10,10 +10,6 @@ configs:
     file: ./caddy/Caddyfile
   dockerd_config:
     file: ./dockerd-exporter/Caddyfile
-  node_rules:
-    file: ./prometheus/rules/swarm_node.rules.yml
-  task_rules:
-    file: ./prometheus/rules/swarm_task.rules.yml
 
 services:
   dockerd-exporter:
@@ -146,7 +142,7 @@ services:
           memory: 64M
 
   prometheus:
-    image: stefanprodan/swarmprom-prometheus:v2.2.0-rc.0
+    image: ${REGISTRY}prometheus-traffckr
     networks:
       - registry-stack_admin-net
     command:
