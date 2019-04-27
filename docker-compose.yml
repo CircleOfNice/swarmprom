@@ -154,6 +154,8 @@ services:
     volumes:
       - prometheus:/prometheus
     configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
       - source: node_rules
         target: /etc/prometheus/swarm_node.rules.yml
       - source: task_rules
