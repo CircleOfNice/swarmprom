@@ -13,14 +13,15 @@ configs:
 
 services:
   dockerd-exporter:
-    image: stefanprodan/caddy
+    image: stefanprodan/dockerd-exporter
+    hostname: dockerd-exporter
     networks:
       - registry-stack_admin-net
     environment:
-      - DOCKER_GWBRIDGE_IP=${DOCKER_GWBRIDGE_IP-172.18.0.1}
-    configs:
-      - source: dockerd_config
-        target: /etc/caddy/Caddyfile
+      IN: "${DOCKER_GWBRIDGE_IP-172.18.0.1}:9323"
+      OUT: 9323
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     deploy:
       mode: global
       resources:
@@ -129,9 +130,6 @@ services:
       - '--path.procfs=/host/proc'
       - '--collector.textfile.directory=/etc/node-exporter/'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-      # no collectors are explicitely enabled here, because the defaults are just fine,
-      # see https://github.com/prometheus/node_exporter
-      # disable ipvs collector because it barfs the node-exporter logs full with errors on my centos 7 vm's
       - '--no-collector.ipvs'
     deploy:
       mode: global
