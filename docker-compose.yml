@@ -192,6 +192,28 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.grafana.rule=PathPrefix(`/`)
+        - traefik.http.routers.grafana.entrypoints=grafana
+        - traefik.http.routers.grafana.middlewares=auth@docker
+        - traefik.http.routers.grafana.service=grafana
+        - traefik.http.services.grafana.loadbalancer.server.port=3000
+        - traefik.http.routers.prometheus.rule=PathPrefix(`/`)
+        - traefik.http.routers.prometheus.entrypoints=prometheus
+        - traefik.http.routers.prometheus.middlewares=auth@docker
+        - traefik.http.routers.prometheus.service=prometheus
+        - traefik.http.services.prometheus.loadbalancer.server.port=9090
+        - traefik.http.routers.alertmanager.rule=PathPrefix(`/`)
+        - traefik.http.routers.alertmanager.entrypoints=alertmanager
+        - traefik.http.routers.alertmanager.middlewares=auth@docker
+        - traefik.http.routers.alertmanager.service=alertmanager
+        - traefik.http.services.alertmanager.loadbalancer.server.port=9093
+        - traefik.http.routers.alert-dashboard.rule=PathPrefix(`/`)
+        - traefik.http.routers.alert-dashboard.entrypoints=alert-dashboard
+        - traefik.http.routers.alert-dashboard.middlewares=auth@docker
+        - traefik.http.routers.alert-dashboard.service=alert-dashboard
+        - traefik.http.services.alert-dashboard.loadbalancer.server.port=9094
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 5s
